@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Dataset
+datasets/
+#Ignoring datasets here as the the dataet is too large to be uploaded to GitHub. Please download the dataset from the original source and place it in the datasets folder.
+
+
+
+# SQLite
+*.db
+
+# Logs
+logs/
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db
