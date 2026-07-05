@@ -15,10 +15,6 @@ env/
 # VS Code
 .vscode/
 
-# Dataset
-datasets/
-#Ignoring datasets here as the the dataet is too large to be uploaded to GitHub. Please download the dataset from the original source and place it in the datasets folder.
-
 
 
 # SQLite
