@@ -1,4 +1,4 @@
-# Image-to-Biomass Prediction Using Computer Vision and Deep Learning
+# Image-to-Biomass Prediction Using Computer Vision and Deep Learning....
 
 An AI-powered precision agriculture solution designed to estimate pasture biomass directly from RGB images captured via smartphones, drones, or field cameras. This system eliminates the need for time-consuming manual harvesting, drying, and weighing by leveraging advanced semantic segmentation, depth estimation, and regression models.
 
@@ -61,3 +61,40 @@ The system provides precise numerical estimations (measured in **kg/ha**) for th
 ├── app.py              # Streamlit / Flask application entry point
 ├── requirements.txt    # Project dependencies
 └── README.md           # Project documentation
+
+IMAGE_TO_BIOMASS
+│
+├── datasets
+│   ├── raw
+│   └── processed
+│
+├── notebooks
+│   ├── 01_dataset_inspection.ipynb
+│   ├── 02_eda.ipynb
+│   ├── 03_preprocessing.ipynb
+│   ├── 04_training.ipynb
+│   └── 05_evaluation.ipynb
+│
+├── src
+│   ├── data
+│   ├── models
+│   ├── visualization
+│   ├── utils
+│   └── config.py
+│
+├── app
+│
+├── models
+│
+├── outputs
+│   ├── plots
+│   ├── predictions
+│   ├── heatmaps
+│   └── reports
+│
+├── docs
+│
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── LICENSE
