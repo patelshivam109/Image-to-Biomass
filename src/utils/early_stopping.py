@@ -2,6 +2,7 @@
 Early Stopping Utility
 """
 
+from pathlib import Path
 import torch
 
 
@@ -10,18 +11,33 @@ class EarlyStopping:
     def __init__(
         self,
         patience=5,
-        path="models/best_model.pth"
+        path=None
     ):
 
         self.patience = patience
-
-        self.path = path
 
         self.counter = 0
 
         self.best_loss = float("inf")
 
         self.early_stop = False
+
+        if path is None:
+
+            project_root = Path(__file__).resolve().parents[2]
+
+            model_dir = project_root / "models"
+
+            model_dir.mkdir(
+                parents=True,
+                exist_ok=True
+            )
+
+            self.path = model_dir / "best_model.pth"
+
+        else:
+
+            self.path = Path(path)
 
     def __call__(
         self,
