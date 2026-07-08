@@ -63,7 +63,8 @@ IMAGE_COLUMN = "image_path"
 
 NUMERICAL_COLUMNS = [
     "NDVI",
-    "Height_cm"
+    "Height_cm",
+    "Month"
 ]
 
 CATEGORICAL_COLUMNS = [
