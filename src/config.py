@@ -1,41 +1,64 @@
+"""
+Project Configuration
+
+Centralized configuration for paths, hyperparameters,
+dataset columns and training settings.
+"""
+
 from pathlib import Path
 
-# -----------------------------
-# Project Directories
-# -----------------------------
+# ==========================================================
+# Project Paths
+# ==========================================================
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-RAW_DATA_DIR = PROJECT_ROOT / "datasets" / "raw"
-PROCESSED_DATA_DIR = PROJECT_ROOT / "datasets" / "processed"
+DATASET_DIR = PROJECT_ROOT / "datasets"
+
+RAW_DATA_DIR = DATASET_DIR / "raw"
+
+PROCESSED_DATA_DIR = DATASET_DIR / "processed"
 
 TRAIN_CSV = PROCESSED_DATA_DIR / "train_processed.csv"
-VAL_CSV = PROCESSED_DATA_DIR / "val_processed.csv"
+
+VALIDATION_CSV = PROCESSED_DATA_DIR / "val_processed.csv"
 
 MODEL_DIR = PROJECT_ROOT / "models"
 
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
+
 PLOT_DIR = OUTPUT_DIR / "plots"
+
 HEATMAP_DIR = OUTPUT_DIR / "heatmaps"
+
 REPORT_DIR = OUTPUT_DIR / "reports"
 
-# -----------------------------
+PREDICTION_DIR = OUTPUT_DIR / "predictions"
+
+# ==========================================================
 # Image Settings
-# -----------------------------
+# ==========================================================
+
 IMAGE_SIZE = 224
 
-# -----------------------------
+# ==========================================================
 # Training Parameters
-# -----------------------------
+# ==========================================================
+
 BATCH_SIZE = 16
+
 NUM_WORKERS = 2
 
 LEARNING_RATE = 1e-4
+
 NUM_EPOCHS = 30
+
 RANDOM_STATE = 42
 
-# -----------------------------
+# ==========================================================
 # Dataset Columns
-# -----------------------------
+# ==========================================================
+
 IMAGE_COLUMN = "image_path"
 
 NUMERICAL_COLUMNS = [
