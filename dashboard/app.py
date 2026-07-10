@@ -150,21 +150,22 @@ with col2:
                         st.info(f"📏 Auto-Estimated Canopy Height from MiDaS: **{height_cm:.1f} cm**")
 
                     # ==========================================
-                    # B. DeepLabV3 Vegetation Mask
+                    # B. Vegetation Segmentation (HSV Computer Vision)
                     # ==========================================
-                    # Standard torchvision transform for DeepLab
-                    seg_preprocess = transforms.Compose([
-                        transforms.ToTensor(),
-                        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-                    ])
-                    input_tensor = seg_preprocess(image).unsqueeze(0)
-                    with torch.no_grad():
-                        seg_output = seg_model(input_tensor)['out'][0]
-                    seg_predictions = seg_output.argmax(0).byte().cpu().numpy()
+                    # Since the pre-trained DeepLabV3 model classifies grass as "background" (solid purple),
+                    # we will use an HSV Color-Space algorithm to accurately segment the green biomass 
+                    # from the soil/dead material. This provides a real, accurate mask for the dashboard.
+                    img_hsv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2HSV)
                     
-                    # Create a generic vegetation mask (merging all "plant" like classes if possible, 
-                    # but for visualization we'll just colorize the DeepLab output map)
-                    mask_colored = cv2.applyColorMap(seg_predictions * 10, cv2.COLORMAP_VIRIDIS)
+                    # Define range for green vegetation in HSV
+                    lower_green = np.array([25, 40, 40])
+                    upper_green = np.array([90, 255, 255])
+                    
+                    # Threshold the HSV image to get the vegetation mask
+                    veg_mask = cv2.inRange(img_hsv, lower_green, upper_green)
+                    
+                    # Colorize it for the dashboard (Yellow/Green for plants, Dark Purple for background)
+                    mask_colored = cv2.applyColorMap(veg_mask, cv2.COLORMAP_VIRIDIS)
                     mask_colored = cv2.cvtColor(mask_colored, cv2.COLOR_BGR2RGB)
 
                     # ==========================================
