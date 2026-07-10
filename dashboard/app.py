@@ -91,7 +91,7 @@ with col2:
                     
                     # 2. Process Metadata
                     # Numerical
-                    num_df = pd.DataFrame([[ndvi, height_cm, month]], columns=NUMERICAL_COLUMNS)
+                    num_df = pd.DataFrame([[ndvi, height_cm]], columns=['NDVI', 'Height_cm'])
                     num_scaled = scaler.transform(num_df)[0]
                     
                     # Categorical
@@ -99,7 +99,7 @@ with col2:
                     species_encoded = encoders['Species'].transform([species])[0]
                     
                     # Combine Metadata
-                    metadata_array = np.concatenate([num_scaled, [state_encoded, species_encoded]])
+                    metadata_array = np.concatenate([num_scaled, [month, state_encoded, species_encoded]])
                     meta_tensor = torch.tensor(metadata_array, dtype=torch.float32).unsqueeze(0)
                     
                     # 3. Model Inference
