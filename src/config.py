@@ -79,3 +79,7 @@ TARGET_COLUMNS = [
     "Dry_Total_g",
     "GDM_g"
 ]
+
+# Dataset targets are grams measured within a 70 cm x 30 cm quadrat.
+# kg/ha = grams * (10,000 m^2/ha) / (1,000 g/kg * 0.21 m^2).
+BIOMASS_G_TO_KG_HA = 10000 / (1000 * 0.70 * 0.30)

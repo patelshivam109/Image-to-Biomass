@@ -8,6 +8,7 @@ import streamlit as st
 import pandas as pd
 import json
 from PIL import Image
+from src.config import BIOMASS_G_TO_KG_HA
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
 
@@ -90,7 +91,7 @@ if history_path.exists():
     final_val = history['val_loss'][-1]
     best_val = min(history['val_loss'])
     best_epoch = history['val_loss'].index(best_val) + 1
-    rmse = best_val ** 0.5
+    rmse = (best_val ** 0.5) * BIOMASS_G_TO_KG_HA
     
     st.markdown('<div class="section-label">Performance Summary</div>', unsafe_allow_html=True)
     

@@ -14,7 +14,7 @@ from PIL import Image
 from src.models.biomass_model import BiomassModel
 from src.visualization.gradcam import GradCam
 from src.data.transforms import val_transform
-from src.config import TARGET_COLUMNS
+from src.config import BIOMASS_G_TO_KG_HA, TARGET_COLUMNS
 
 # --- Page Config ---
 st.set_page_config(
@@ -120,6 +120,50 @@ st.markdown("""
         color: #E8F5E9 !important;
         font-family: 'Space Grotesk', sans-serif !important;
         font-weight: 700 !important;
+    }
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+    }
+    .result-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 16px 18px;
+        min-width: 0;
+    }
+    .result-card-label {
+        color: #B0BEC5;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        line-height: 1.25;
+        min-height: 2.1em;
+    }
+    .result-card-value {
+        color: #E8F5E9;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-top: 10px;
+        white-space: nowrap;
+    }
+    .result-card-unit {
+        color: #66BB6A;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-top: 4px;
+        letter-spacing: 0.4px;
+    }
+    @media (max-width: 1100px) {
+        .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+        .result-grid { grid-template-columns: 1fr; }
     }
 
     /* Button */
@@ -325,13 +369,32 @@ with results_col:
                 superimposed_img = np.uint8(heatmap * 0.4 + image_np * 0.6)
 
                 # --- METRICS ---
-                results = dict(zip(TARGET_COLUMNS, prediction))
+                results = dict(zip(TARGET_COLUMNS, prediction * BIOMASS_G_TO_KG_HA))
                 
-                r1, r2, r3, r4 = st.columns(4)
-                r1.metric("Green Dry Matter", f"{results.get('GDM_g', 0):.1f}", "kg/ha")
-                r2.metric("Clover Biomass", f"{results.get('Dry_Clover_g', 0):.1f}", "kg/ha")
-                r3.metric("Dead Material", f"{results.get('Dry_Dead_g', 0):.1f}", "kg/ha")
-                r4.metric("Total Biomass", f"{results.get('Dry_Total_g', 0):.1f}", "kg/ha")
+                st.markdown(f"""
+                <div class="result-grid">
+                    <div class="result-card">
+                        <div class="result-card-label">Green Dry Matter</div>
+                        <div class="result-card-value">{results.get('GDM_g', 0):,.1f}</div>
+                        <div class="result-card-unit">kg/ha</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Clover Biomass</div>
+                        <div class="result-card-value">{results.get('Dry_Clover_g', 0):,.1f}</div>
+                        <div class="result-card-unit">kg/ha</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Dead Material</div>
+                        <div class="result-card-value">{results.get('Dry_Dead_g', 0):,.1f}</div>
+                        <div class="result-card-unit">kg/ha</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-label">Total Biomass</div>
+                        <div class="result-card-value">{results.get('Dry_Total_g', 0):,.1f}</div>
+                        <div class="result-card-unit">kg/ha</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
                 st.markdown('<div class="styled-divider"></div>', unsafe_allow_html=True)
 
