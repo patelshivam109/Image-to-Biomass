@@ -1,6 +1,3 @@
-"""
-Image Transformation Pipelines
-"""
 
 from torchvision import transforms
 from src.config import IMAGE_SIZE

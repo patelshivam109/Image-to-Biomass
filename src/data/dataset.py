@@ -1,6 +1,4 @@
-"""
-Custom Dataset for Image-to-Biomass Prediction
-"""
+
 
 from pathlib import Path
 
