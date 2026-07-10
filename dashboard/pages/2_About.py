@@ -167,6 +167,6 @@ st.markdown(f'<div style="margin-bottom: 30px;">{badge_html}</div>', unsafe_allo
 
 st.markdown("""
 <div style="color: #546E7A; font-size: 0.82rem; text-align: center; padding: 20px 0;">
-    Built for Precision Agriculture &bull; Powered by Deep Learning
+    Built for Precision Agriculture &bull; Deep Learning
 </div>
 """, unsafe_allow_html=True)
