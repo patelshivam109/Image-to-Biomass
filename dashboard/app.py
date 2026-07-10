@@ -23,7 +23,6 @@ from src.config import NUMERICAL_COLUMNS, CATEGORICAL_COLUMNS, TARGET_COLUMNS
 # Set page config
 st.set_page_config(
     page_title="Biomass AI Dashboard",
-    page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -149,13 +148,12 @@ except Exception as e:
 
 
 # --- HEADER ---
-st.markdown('<h1 class="main-header">🌿 Precision Pasture AI</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">Precision Pasture AI</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Advanced Biomass Estimation using Deep Learning & Computer Vision</p>', unsafe_allow_html=True)
 
 # --- SIDEBAR CONFIGURATION ---
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1892/1892751.png", width=100)
-st.sidebar.title("⚙️ Field Metadata")
-st.sidebar.write("Input environmental data to refine predictions.")
+st.sidebar.title("Field Metadata Input")
+st.sidebar.info("Provide the following environmental metadata. These extra inputs give the AI essential clues about the field conditions, allowing it to generate the most accurate and highly tailored biomass prediction possible.")
 
 ndvi = st.sidebar.slider("NDVI Index", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
 height_cm = st.sidebar.number_input("Canopy Height (cm)", value=0.0, step=0.5, help="Leave as 0.0 to auto-estimate using MiDaS AI.")
@@ -168,13 +166,13 @@ species_options = list(encoders['Species'].classes_) if 'Species' in encoders el
 species = st.sidebar.selectbox("Primary Pasture Species", options=species_options)
 
 st.sidebar.markdown("---")
-st.sidebar.info("Tip: Navigate to 'Model Metrics' using the sidebar menu above to view training performance!")
+st.sidebar.write("Navigate to 'Model Metrics' and 'About' using the menu above.")
 
 # --- MAIN CONTENT ---
 main_col1, main_col2 = st.columns([1, 2])
 
 with main_col1:
-    st.markdown("### 📸 Upload Imagery")
+    st.markdown("### Upload Imagery")
     uploaded_file = st.file_uploader("Select a top-down RGB field image", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
     
     if uploaded_file is not None:
@@ -182,11 +180,11 @@ with main_col1:
         image_np = np.array(image)
         st.image(image, caption="Source Image", use_container_width=True, clamp=True)
     else:
-        st.info("👆 Upload an image to begin the analysis.")
+        st.info("Upload an image to begin the analysis.")
 
 with main_col2:
     if uploaded_file is not None:
-        if st.button("🚀 Execute AI Pipeline"):
+        if st.button("Execute AI Pipeline"):
             with st.spinner("Analyzing vegetation, generating depth maps, and predicting biomass..."):
                 try:
                     # A. Pseudo-Depth Estimation (Zero-Download Computer Vision)
@@ -199,7 +197,7 @@ with main_col2:
                     if height_cm == 0.0:
                         estimated_height = 10 + (np.mean(depth_map) * 20)
                         height_cm = estimated_height
-                        st.success(f"📏 CV Auto-Estimated Canopy Height: **{height_cm:.1f} cm**")
+                        st.success(f"CV Auto-Estimated Canopy Height: **{height_cm:.1f} cm**")
 
                     # B. Vegetation Segmentation (HSV Computer Vision)
                     img_hsv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2HSV)
@@ -230,17 +228,17 @@ with main_col2:
                     superimposed_img = np.uint8(superimposed_img)
 
                     # --- RESULTS DISPLAY ---
-                    st.markdown("### 📊 Yield Estimations (kg/ha)")
+                    st.markdown("### Yield Estimations (kg/ha)")
                     results = dict(zip(TARGET_COLUMNS, prediction))
                     
                     m1, m2, m3 = st.columns(3)
-                    m1.metric("🌱 Green Dry Matter", f"{results.get('GDM_g', 0):.2f} kg/ha", "Optimal")
-                    m2.metric("☘️ Dry Clover Biomass", f"{results.get('Dry_Clover_g', 0):.2f} kg/ha")
-                    m3.metric("🍂 Dry Dead Biomass", f"{results.get('Dry_Dead_g', 0):.2f} kg/ha", "-Requires Attention", delta_color="inverse")
+                    m1.metric("Green Dry Matter", f"{results.get('GDM_g', 0):.2f} kg/ha", "Optimal")
+                    m2.metric("Dry Clover Biomass", f"{results.get('Dry_Clover_g', 0):.2f} kg/ha")
+                    m3.metric("Dry Dead Biomass", f"{results.get('Dry_Dead_g', 0):.2f} kg/ha", "-Requires Attention", delta_color="inverse")
                     
-                    st.metric("📦 Total Dry Biomass", f"{results.get('Dry_Total_g', 0):.2f} kg/ha")
+                    st.metric("Total Dry Biomass", f"{results.get('Dry_Total_g', 0):.2f} kg/ha")
                     
-                    st.markdown("### 👁️ Visual Intelligence")
+                    st.markdown("### Visual Intelligence")
                     v1, v2, v3 = st.columns(3)
                     with v1:
                         st.image(mask_colored, caption="Semantic Plant Mask", use_container_width=True)
