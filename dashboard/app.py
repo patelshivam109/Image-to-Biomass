@@ -138,15 +138,10 @@ def load_assets():
     biomass_model = BiomassModel()
     biomass_model.load_state_dict(torch.load(models_dir / "best_model.pth", map_location=torch.device('cpu'), weights_only=False))
     biomass_model.eval()
-    
-    midas = torch.hub.load("intel-isl/MiDaS", "MiDaS_small")
-    midas.eval()
-    midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms").small_transform
-    
-    return biomass_model, scaler, encoders, midas, midas_transforms
+    return biomass_model, scaler, encoders
 
 try:
-    biomass_model, scaler, encoders, midas, midas_transforms = load_assets()
+    biomass_model, scaler, encoders = load_assets()
     grad_cam = GradCam(biomass_model)
 except Exception as e:
     st.error(f"Error loading model assets: {e}")
@@ -194,20 +189,17 @@ with main_col2:
         if st.button("🚀 Execute AI Pipeline"):
             with st.spinner("Analyzing vegetation, generating depth maps, and predicting biomass..."):
                 try:
-                    # A. MiDaS Depth Estimation
-                    img_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-                    input_batch = midas_transforms(img_cv)
-                    with torch.no_grad():
-                        depth_prediction = midas(input_batch)
-                        depth_prediction = torch.nn.functional.interpolate(
-                            depth_prediction.unsqueeze(1), size=img_cv.shape[:2], mode="bicubic", align_corners=False,
-                        ).squeeze()
-                    depth_map = depth_prediction.cpu().numpy()
+                    # A. Pseudo-Depth Estimation (Zero-Download Computer Vision)
+                    # Because MiDaS PyTorch model crashes the free-tier server's memory limits, we approximate depth
+                    # using grayscale intensity (as taller canopy catches more light / looks closer).
+                    gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+                    blurred = cv2.GaussianBlur(gray, (21, 21), 0)
+                    depth_map = cv2.normalize(blurred, None, 0, 1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
                     
                     if height_cm == 0.0:
-                        estimated_height = 10 + (np.mean(depth_map) / np.max(depth_map)) * 20
+                        estimated_height = 10 + (np.mean(depth_map) * 20)
                         height_cm = estimated_height
-                        st.success(f"📏 AI Auto-Estimated Canopy Height: **{height_cm:.1f} cm**")
+                        st.success(f"📏 CV Auto-Estimated Canopy Height: **{height_cm:.1f} cm**")
 
                     # B. Vegetation Segmentation (HSV Computer Vision)
                     img_hsv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2HSV)
