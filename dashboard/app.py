@@ -221,20 +221,6 @@ st.markdown("""
         border: none;
     }
 
-    /* Status pill */
-    .status-pill {
-        display: inline-block;
-        padding: 4px 14px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-    .status-ready {
-        background: rgba(102, 187, 106, 0.15);
-        color: #66BB6A;
-        border: 1px solid rgba(102, 187, 106, 0.3);
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -265,7 +251,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('<span class="status-pill status-ready">Model Loaded &bull; Ready</span>', unsafe_allow_html=True)
 st.markdown('<div class="styled-divider"></div>', unsafe_allow_html=True)
 
 # --- SIDEBAR ---
