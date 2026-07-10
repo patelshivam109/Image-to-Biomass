@@ -51,50 +51,64 @@ The system provides precise numerical estimations (measured in **kg/ha**) for th
 
 ---
 
+## 🚀 How to Run the Dashboard
+
+1. **Set up your environment:**
+   Create a virtual environment and activate it:
+   ```powershell
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+2. **Install Dependencies:**
+   Install the required libraries (Note: requires NumPy < 2.0 to avoid PyTorch/OpenCV conflicts):
+   ```powershell
+   pip install -r requirements.txt
+   pip install "numpy<2.0" "opencv-python<4.11"
+   ```
+
+3. **Run the Streamlit App:**
+   ```powershell
+   python -m streamlit run dashboard/app.py
+   ```
+
+---
+
 ## 📁 Repository Structure
 
 ```text
-├── data/               # Placeholder for sample images and datasets
-├── models/             # Model architectures (Segmentation, Regression, Depth)
-├── notebooks/          # Exploratory Data Analysis and training experiments
-├── src/                # Core source code for processing and inference
-├── app.py              # Streamlit / Flask application entry point
-├── requirements.txt    # Project dependencies
-└── README.md           # Project documentation
-
 IMAGE_TO_BIOMASS
 │
-├── datasets
-│   ├── raw
-│   └── processed
+├── dashboard/
+│   └── app.py                  # Streamlit application entry point
 │
-├── notebooks
+├── datasets/
+│   ├── raw/                    # Raw field images and CSVs
+│   └── processed/              # Cleaned datasets
+│
+├── models/
+│   ├── best_model.pth          # Trained EfficientNet model weights
+│   ├── scaler.pkl              # Data normalizer
+│   └── label_encoders.pkl      # Categorical encoders
+│
+├── notebooks/
 │   ├── 01_dataset_inspection.ipynb
 │   ├── 02_eda.ipynb
 │   ├── 03_preprocessing.ipynb
 │   ├── 04_training.ipynb
 │   └── 05_evaluation.ipynb
 │
-├── src
-│   ├── data
-│   ├── models
-│   ├── visualization
-│   ├── utils
-│   └── config.py
+├── outputs/
+│   ├── plots/
+│   ├── predictions/
+│   └── reports/
 │
-├── app
+├── src/
+│   ├── data/                   # Data loaders and transforms
+│   ├── models/                 # PyTorch architectures (Biomass, Segmentation)
+│   ├── utils/                  # Training scripts and metrics
+│   └── config.py               # Global configurations
 │
-├── models
-│
-├── outputs
-│   ├── plots
-│   ├── predictions
-│   ├── heatmaps
-│   └── reports
-│
-├── docs
-│
-├── requirements.txt
-├── README.md
-├── .gitignore
-└── LICENSE
+├── requirements.txt            # Project dependencies
+└── README.md                   # Project documentation
+```
