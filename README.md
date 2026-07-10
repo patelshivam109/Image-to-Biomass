@@ -72,6 +72,17 @@ The system provides precise numerical estimations (measured in **kg/ha**) for th
    python -m streamlit run dashboard/app.py
    ```
 
+## 📦 Dataset Information
+
+> [!NOTE]
+> **The dataset is NOT included in this GitHub repository.** 
+> Image datasets for Computer Vision are typically massive (several Gigabytes) and exceed GitHub's strict file size limits. 
+> 
+> **How to get the data:**
+> 1. Download the raw dataset from here: `[https://www.kaggle.com/competitions/csiro-biomass]`
+> 2. Extract the ZIP file.
+> 3. Place the raw images and CSV metadata into the `datasets/raw/` directory.
+
 ---
 
 ## 📁 Repository Structure
