@@ -139,17 +139,14 @@ def load_assets():
     biomass_model.load_state_dict(torch.load(models_dir / "best_model.pth", map_location=torch.device('cpu'), weights_only=False))
     biomass_model.eval()
     
-    seg_model = deeplabv3_resnet50(weights=DeepLabV3_ResNet50_Weights.DEFAULT)
-    seg_model.eval()
-    
     midas = torch.hub.load("intel-isl/MiDaS", "MiDaS_small")
     midas.eval()
     midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms").small_transform
     
-    return biomass_model, scaler, encoders, seg_model, midas, midas_transforms
+    return biomass_model, scaler, encoders, midas, midas_transforms
 
 try:
-    biomass_model, scaler, encoders, seg_model, midas, midas_transforms = load_assets()
+    biomass_model, scaler, encoders, midas, midas_transforms = load_assets()
     grad_cam = GradCam(biomass_model)
 except Exception as e:
     st.error(f"Error loading model assets: {e}")
