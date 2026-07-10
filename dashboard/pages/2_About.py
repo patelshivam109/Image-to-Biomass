@@ -1,70 +1,172 @@
-import sys
-from pathlib import Path
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-sys.path.append(str(PROJECT_ROOT))
-
 import streamlit as st
 
-st.set_page_config(page_title="About the Model", layout="wide")
+st.set_page_config(page_title="About", layout="wide")
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .main-header {
-        font-family: 'Outfit', sans-serif;
-        background: -webkit-linear-gradient(45deg, #FF6347, #FF4500);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
-        font-size: 3rem;
-        margin-bottom: 20px;
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .hero-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700; font-size: 2.2rem; color: #E8F5E9; margin-bottom: 5px;
     }
-    .content-box {
-        background: rgba(255, 255, 255, 0.05);
+    .hero-accent {
+        background: linear-gradient(135deg, #FF7043, #FF5722);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .section-label {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.75rem; font-weight: 700; color: #FF7043;
+        text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;
+    }
+    .section-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.4rem; font-weight: 700; color: #ECEFF1; margin-bottom: 15px;
+    }
+    .styled-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 112, 67, 0.3), transparent);
+        margin: 30px 0; border: none;
+    }
+    .about-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px; padding: 28px; margin-bottom: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .about-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 112, 67, 0.25);
+    }
+    .about-card h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        color: #ECEFF1; font-size: 1.15rem; margin-bottom: 12px;
+    }
+    .about-card p, .about-card li {
+        color: #B0BEC5; font-size: 0.9rem; line-height: 1.8;
+    }
+    .tech-badge {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin: 4px;
+        background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 25px;
-        margin-bottom: 20px;
+        color: #CFD8DC;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<h1 class="main-header">About the Project</h1>', unsafe_allow_html=True)
+st.markdown('<div class="hero-title">About <span class="hero-accent">This Project</span></div>', unsafe_allow_html=True)
+st.markdown('<div style="color: #78909C; font-size: 0.9rem; margin-bottom: 30px;">Understanding the problem, the architecture, and the technology behind Precision Pasture AI.</div>', unsafe_allow_html=True)
 
-with st.container():
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
-    st.subheader("What Problem Does This Solve?")
-    st.write("""
-    Traditionally, estimating pasture biomass requires a labor-intensive process known as 'clipping and weighing'. 
-    A farmer must physically cut a square meter of grass, dry it in an oven to remove moisture, and weigh it on a scale to determine the available feed in kilograms per hectare (kg/ha).
-    
-    This application automates that entire process using **Computer Vision and Deep Learning**. By simply uploading a top-down RGB image of the pasture and providing some basic environmental metadata, the AI instantly predicts the dry biomass yield. This saves immense amounts of time and money while allowing for much larger scale monitoring.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+# --- Problem ---
+st.markdown("""
+<div class="about-card">
+    <h3>The Problem</h3>
+    <p>
+        Estimating pasture biomass traditionally requires a labor-intensive process known as <strong>"clipping and weighing"</strong>. 
+        A farmer must physically cut a square meter of grass, dry it in an oven to remove all moisture, 
+        and weigh it on a scale. This process is repeated across the entire field to determine the 
+        available feed measured in kilograms per hectare (kg/ha).
+    </p>
+    <p style="margin-top: 10px;">
+        This application <strong>automates the entire workflow</strong> using Computer Vision and Deep Learning. 
+        By uploading a single top-down RGB photograph of the pasture and providing basic environmental metadata, 
+        the AI instantly predicts dry biomass yield across multiple vegetation categories.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
-with st.container():
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
-    st.subheader("The AI Architecture")
-    st.write("""
-    The core intelligence of this application relies on a **Dual-Input Neural Network** built with PyTorch.
-    
-    1. **Visual Feature Extraction:** The model uses an `EfficientNet-B0` backbone to process the RGB image. EfficientNet is a state-of-the-art convolutional neural network that is highly optimized to extract complex visual patterns (like leaf texture, canopy density, and grass coverage) with extreme efficiency.
-    2. **Metadata Processing Branch:** Images alone can be deceiving (e.g., grass in winter vs. summer). We built a separate neural network branch consisting of fully connected linear layers to process environmental metadata (NDVI, Canopy Height, State, and Species).
-    3. **Feature Fusion & Regression:** The visual features extracted by EfficientNet are flattened and mathematically concatenated (fused) with the processed metadata. This fused intelligence is then passed through a final regression head to predict the exact continuous numerical values (in kg/ha) of the various biomass categories.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-with st.container():
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
-    st.subheader("Visual Intelligence Tools")
-    st.write("""
-    To make the AI's decisions transparent, this dashboard employs two advanced visual tools:
-    
-    * **HSV Semantic Segmentation:** We use a traditional computer vision Color-Space algorithm to dynamically isolate green vegetation from the soil background, providing an instant visual mask of the living plant matter.
-    * **Grad-CAM (Gradient-weighted Class Activation Mapping):** This algorithm hooks into the final convolutional layers of the EfficientNet model during prediction. It calculates the gradients to generate a heatmap over the original image, showing exactly *where* the AI was looking when it made its biomass prediction.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="styled-divider"></div>', unsafe_allow_html=True)
 
-st.info("Built for Precision Agriculture. Powered by PyTorch & Streamlit.")
+# --- Architecture ---
+st.markdown('<div class="section-label">Architecture</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">How the Model Works</div>', unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    <div class="about-card">
+        <h3>EfficientNet-B0 Visual Backbone</h3>
+        <p>
+            The core of the model uses <strong>EfficientNet-B0</strong>, a state-of-the-art convolutional 
+            neural network optimized for visual feature extraction. It analyzes the uploaded RGB image 
+            to detect complex patterns including leaf texture, canopy density, color distribution, 
+            and vegetation coverage.
+        </p>
+        <p style="margin-top: 8px;">
+            EfficientNet achieves superior accuracy with significantly fewer parameters than 
+            alternatives like ResNet or VGG, making it ideal for deployment on resource-constrained servers.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="about-card">
+        <h3>Dual-Input Feature Fusion</h3>
+        <p>
+            Images alone can be misleading &mdash; the same grass looks different in winter vs. summer, 
+            or in New South Wales vs. Tasmania. To solve this, the model has a <strong>second neural 
+            network branch</strong> that processes environmental metadata:
+        </p>
+        <ul>
+            <li><strong>NDVI</strong> &mdash; Normalized Difference Vegetation Index (plant health)</li>
+            <li><strong>Canopy Height</strong> &mdash; Estimated or measured grass height</li>
+            <li><strong>Geographic State</strong> &mdash; Regional climate influence</li>
+            <li><strong>Species</strong> &mdash; Grass type (e.g., Ryegrass, Clover, Kikuyu)</li>
+        </ul>
+        <p style="margin-top: 8px;">
+            Both branches are <strong>fused</strong> and passed through a regression head to output 
+            precise continuous values in kg/ha.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown('<div class="styled-divider"></div>', unsafe_allow_html=True)
+
+# --- Visual Tools ---
+st.markdown('<div class="section-label">Visual Intelligence</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Transparency Tools</div>', unsafe_allow_html=True)
+
+st.markdown("""
+<div class="about-card">
+    <h3>Making AI Decisions Transparent</h3>
+    <p>This dashboard employs two visual analysis tools to make the AI's reasoning interpretable:</p>
+    <ul>
+        <li>
+            <strong>HSV Semantic Segmentation</strong> &mdash; A color-space algorithm that isolates 
+            green vegetation from soil, dead material, and shadows. Provides an instant binary mask 
+            showing living plant matter with a vegetation coverage percentage.
+        </li>
+        <li style="margin-top: 8px;">
+            <strong>Grad-CAM (Gradient-weighted Class Activation Mapping)</strong> &mdash; Hooks into 
+            the final convolutional layers of EfficientNet during inference. By analyzing the gradients, 
+            it generates a heatmap overlay showing exactly which regions of the image contributed most 
+            to the biomass prediction.
+        </li>
+    </ul>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="styled-divider"></div>', unsafe_allow_html=True)
+
+# --- Tech Stack ---
+st.markdown('<div class="section-label">Stack</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Technology</div>', unsafe_allow_html=True)
+
+badges = ["PyTorch", "EfficientNet-B0", "Streamlit", "OpenCV", "scikit-learn", "Pandas", "NumPy", "Grad-CAM", "Python 3.10"]
+badge_html = "".join([f'<span class="tech-badge">{b}</span>' for b in badges])
+st.markdown(f'<div style="margin-bottom: 30px;">{badge_html}</div>', unsafe_allow_html=True)
+
+st.markdown("""
+<div style="color: #546E7A; font-size: 0.82rem; text-align: center; padding: 20px 0;">
+    Built for Precision Agriculture &bull; Powered by Deep Learning
+</div>
+""", unsafe_allow_html=True)
