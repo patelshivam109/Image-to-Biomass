@@ -8,7 +8,11 @@ import streamlit as st
 import pandas as pd
 import json
 from PIL import Image
-from src.config import BIOMASS_G_TO_KG_HA
+
+try:
+    from src.config import BIOMASS_G_TO_KG_HA
+except ImportError:
+    BIOMASS_G_TO_KG_HA = 10000 / (1000 * 0.70 * 0.30)
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
 

@@ -14,7 +14,12 @@ from PIL import Image
 from src.models.biomass_model import BiomassModel
 from src.visualization.gradcam import GradCam
 from src.data.transforms import val_transform
-from src.config import BIOMASS_G_TO_KG_HA, TARGET_COLUMNS
+from src.config import TARGET_COLUMNS
+
+try:
+    from src.config import BIOMASS_G_TO_KG_HA
+except ImportError:
+    BIOMASS_G_TO_KG_HA = 10000 / (1000 * 0.70 * 0.30)
 
 # --- Page Config ---
 st.set_page_config(
