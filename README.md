@@ -2,7 +2,7 @@
 
 An AI-powered precision agriculture solution designed to estimate pasture biomass directly from RGB images captured via smartphones, drones, or field cameras. This system eliminates the need for time-consuming manual harvesting, drying, and weighing by leveraging advanced semantic segmentation, depth estimation, and regression models.
 
-----
+---
 
 ## 📌 Project Overview
 
